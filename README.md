@@ -1,110 +1,140 @@
 # Policy Optimization for Financial Decision-Making
 
-This repository contains the end-to-end machine learning solution for the **Shodh Hiring (ML) Project**. The project involves analyzing the LendingClub loan dataset to build and compare two different models for a fintech company's loan approval process: a predictive Deep Learning (DL) model and an offline Reinforcement Learning (RL) agent.
+This repository contains the end-to-end machine learning solution for the **Shodh Hiring (ML) Project**. The project analyzes the LendingClub loan dataset to build and compare two different models for a fintech company's loan approval process:  
+a **predictive Deep Learning (DL) model** and an **offline Reinforcement Learning (RL) agent**.
 
-The primary objective is to move beyond simple default prediction and develop a policy that aims to **maximize financial return**, comparing a standard supervised approach (Task 2) with a reward-maximizing offline RL policy (Task 3).
+The objective is to go beyond simple default prediction and develop a policy that **maximizes financial return**, comparing a standard supervised model (Task 2) with a reward-maximizing offline RL policy (Task 3).
+
+---
 
 ## 🚀 Project Tasks
 
-This project is broken down into four core tasks as specified by the assignment:
+This project consists of four main tasks:
 
-1.  **Task 1: Exploratory Data Analysis (EDA) & Preprocessing:** The data is loaded, analyzed for missing values, and cleaned. Features are engineered (e.g., `emp_length` mapping, `region` creation) and selected. All preprocessing, encoding (Target Encoding), and scaling (StandardScaler) steps are performed.
-2.  **Task 2: Predictive Deep Learning Model:** A Multi-Layer Perceptron (MLP) using TensorFlow/Keras is built to predict the probability of loan default (a binary classification task). The model's performance is evaluated using **AUC and F1-Score**.
-3.  **Task 3: Offline Reinforcement Learning Agent:** The problem is reframed as an offline RL task.
-    * **State (s):** The preprocessed vector of applicant features.
-    * **Action (a):** A discrete space {0: Deny, 1: Approve}.
-    * **Reward (r):** A function engineered to reflect financial return:
-        * `Deny`: **0** (no gain, no loss).
-        * `Approve (Paid)`: **+ (loan_amnt * int_rate)** (profit).
-        * `Approve (Default)`: **- loan_amnt** (loss).
-    * An agent is trained using the **Discrete Conservative Q-Learning (CQL)** algorithm from the `d3rlpy` library to learn an optimal approval policy from the static dataset.
-4.  **Task 4: Analysis & Comparison:** The results from both models are used to provide a detailed analysis, comparing the predictive model's implicit policy (e.g., "approve if default prob < 0.5") with the RL agent's explicit, reward-driven policy. This analysis is detailed in the separate **Final Report**.
+1. **Task 1: Exploratory Data Analysis (EDA) & Preprocessing**  
+   - The dataset is cleaned and analyzed for missing values.  
+   - Feature engineering (e.g., mapping `emp_length`, creating `region`) and selection are performed.  
+   - Encoding (Target Encoding) and scaling (StandardScaler) are applied.
+
+2. **Task 2: Predictive Deep Learning Model**  
+   - A Multi-Layer Perceptron (MLP) built using TensorFlow/Keras predicts the probability of loan default (binary classification).  
+   - Model performance is evaluated using **AUC** and **F1-Score**.
+
+3. **Task 3: Offline Reinforcement Learning Agent**  
+   - The problem is reframed as an **offline RL** task:  
+     - **State (s):** Preprocessed applicant features  
+     - **Action (a):** {0 = Deny, 1 = Approve}  
+     - **Reward (r):**  
+       - Deny → 0 (no gain/loss)  
+       - Approve (Paid) → + (loan_amnt × int_rate)  
+       - Approve (Default) → − loan_amnt  
+   - A `Discrete Conservative Q-Learning (CQL)` agent from **d3rlpy** learns an optimal approval policy from the static dataset.
+
+4. **Task 4: Analysis & Comparison**  
+   - Compare the predictive model’s implicit policy (e.g., “approve if default prob < 0.5”) with the RL agent’s explicit, reward-driven policy.  
+   - Discuss results and insights in the **Final Report**.
 
 ---
 
 ## 📂 Repository Structure
+
+```
 .
 ├── input/
-│   └── accepted_2007_to_2018Q4.csv    # (Not included, must be downloaded)
-├── pranjal-dl-eda.ipynb             # Notebook for Task 1 (EDA) & Task 2 (DL Model)
-├── reinforce-pranjal.ipynb          # Notebook for Task 3 (Offline RL Agent)
-├── requirements.txt                 # Python dependencies
-├── Final_Report.pdf                 # Task 4 Analysis (Submitted separately)
-└── README.md                        # This file
+│   └── accepted_2007_to_2018Q4.csv       # (Download from Kaggle; not included)
+├── pranjal-dl-eda.ipynb                  # Task 1 & Task 2: EDA + Deep Learning Model
+├── reinforce-pranjal.ipynb               # Task 3: Offline RL Agent
+├── requirements.txt                      # Python dependencies
+├── Final_Report.pdf                      # Task 4: Analysis & Comparison
+└── README.md                             # This file
+```
+
 ---
 
 ## ⚙️ Setup & Installation
 
-Follow these steps to set up the environment and reproduce the results.
+Follow these steps to reproduce results:
 
-1.  **Clone the Repository:**
-    ```bash
-    git clone [LINK_TO_YOUR_GITHUB_REPO]
-    cd [REPOSITORY_NAME]
-    ```
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+   cd YOUR_REPO_NAME
+   ```
 
-2.  **Download the Data:**
-    * Download the `accepted_2007_to_2018Q4.csv` file from the [LendingClub Loan Data on Kaggle](https://www.kaggle.com/datasets/wordsforthewise/lending-club).
-    * Create an `input/` directory in the root of the project.
-    * Place the downloaded CSV file into this directory. The notebooks are configured to look for the file at this path: `/kaggle/input/shodhh/accepted_2007_to_2018Q4.csv`.
-    * **Note:** You must update the path variable `DATA_FILE_PATH` in `pranjal-dl-eda.ipynb` (Cell 23) and `RAW_PATH` in `reinforce-pranjal.ipynb` (Cell 1) to match your local file structure (e.g., `input/accepted_2007_to_2018Q4.csv`).
+2. **Download the Data**
+   - Get the dataset from [LendingClub Loan Data on Kaggle](https://www.kaggle.com/datasets/wordsforthewise/lending-club).
+   - Create an `input/` folder in the project root.  
+   - Place the CSV file inside it.  
+   - Update these paths if needed:  
+     - `DATA_FILE_PATH` in `pranjal-dl-eda.ipynb`  
+     - `RAW_PATH` in `reinforce-pranjal.ipynb`
 
-3.  **Create a Virtual Environment:**
-    ```bash
-    python3 -m venv venv
-    source venv/bin/activate
-    ```
+3. **Create a Virtual Environment**
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
-4.  **Install Dependencies:**
-    A `requirements.txt` file is provided, generated from the notebooks.
-    ```bash
-    pip install -r requirements.txt
-    ```
-    This file includes:
-    * `pandas`
-    * `numpy`
-    * `tensorflow`
-    * `scikit-learn==1.5.2` (version specified in notebook)
-    * `imbalanced-learn`
-    * `category_encoders`
-    * `d3rlpy==2.4.0` (version specified in notebook)
-    * `gymnasium[classic-control]==0.29.1` (version specified in notebook)
-    * `joblib`
+4. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+   **Dependencies include:**
+   - pandas  
+   - numpy  
+   - tensorflow  
+   - scikit-learn==1.5.2  
+   - imbalanced-learn  
+   - category_encoders  
+   - d3rlpy==2.4.0  
+   - gymnasium[classic-control]==0.29.1  
+   - joblib
 
 ---
 
 ## 🏃 Execution: How to Run
 
-Run the notebooks sequentially.
+### 1. Run EDA and Deep Learning Model
+**Notebook:** `pranjal-dl-eda.ipynb`
 
-### 1. Task 1 & 2: EDA and Deep Learning Model
+Steps performed:
+1. Loads raw data (sample of 100,000 rows for faster runs).  
+2. Cleans, preprocesses, and engineers features.  
+3. Applies undersampling to balance classes.  
+4. Builds, trains, and evaluates the Keras MLP model.
 
-Run the `pranjal-dl-eda.ipynb` notebook from top to bottom.
+**Key Outputs:**
+- **AUC Score:** ~0.93  
+- **F1-Score (for Defaulted=1):** ~0.75  
+- **Classification Report:** Precision/Recall for both classes
 
-* **What it does:**
-    1.  Loads the raw data (sampling 100,000 rows for speed).
-    2.  Performs all **Task 1** cleaning, preprocessing, and feature engineering (Cells 23-27).
-    3.  Performs a stratified train-test split.
-    4.  Applies undersampling (`RandomUnderSampler`) to the training set to balance the classes.
-    5.  Applies feature selection (`VarianceThreshold` and a pre-defined list) (Cell 30).
-    6.  Builds, trains, and evaluates the **Task 2** Keras DL model (Cell 31).
-* **Key Output (Cell 31):**
-    * **AUC Score:** 0.9317
-    * **F1-Score (for Defaulted=1):** 0.75
-    * **Classification Report:** Provides precision and recall for both classes.
+---
 
-### 2. Task 3: Offline Reinforcement Learning Agent
+### 2. Run Offline RL Agent
+**Notebook:** `reinforce-pranjal.ipynb`
 
-Run the `reinforce-pranjal.ipynb` notebook from top to bottom.
+Steps performed:
+1. Loads raw data and applies minimal preprocessing.  
+2. Defines a custom reward function as specified.  
+3. Builds the offline dataset (`MDPDataset`) with transitions for both actions (Approve/Deny).  
+4. Trains a `DiscreteCQL` agent.  
+5. Evaluates policy by estimating average reward per loan.
 
-* **What it does:**
-    1.  Loads the raw data (Cell 4). **Note:** This notebook re-runs a minimal preprocessing pipeline for self-containment.
-    2.  Defines the custom reward function as per **Task 3** specifications (Cell 6).
-    3.  Builds the offline `MDPDataset` for `d3rlpy` by creating transitions for both possible actions (Approve/Deny) for each loan application (Cell 6).
-    4.  Initializes the `DiscreteCQL` algorithm (Cell 7).
-    5.  Trains the agent on the prepared dataset (Cell 8).
-    6.  Evaluates the trained policy on the held-out test set by calculating the **Estimated Policy Value** (average reward) (Cell 9).
-* **Key Output (Cell 9):**
-    * **Average reward per application (Estimated Policy Value):** The final business metric.
-    * **Approval Rate:** The percentage of loans the RL agent's policy decides to approve.
-    * **Decision vs. Outcome Matrix:** A confusion matrix showing the agent's decisions (Deny/Approve) against the actual ground-truth outcomes (Paid/Default).
+**Key Outputs:**
+- **Average reward per application (Estimated Policy Value)**  
+- **Approval Rate (Policy’s tendency to approve)**  
+- **Decision vs Outcome Matrix** (Deny/Approve vs Paid/Default)
+
+---
+
+## 🧠 Insights
+- The **DL model** focuses on minimizing default probability.  
+- The **RL agent** directly optimizes financial reward, balancing risk and profit.  
+- This approach demonstrates how **offline RL can learn optimal financial decision policies** without live deployment.
+
+---
+
+## 📜 License
+This repository is distributed for educational and hiring evaluation purposes only.
+
+---
